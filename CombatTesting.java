@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.Scanner;
+
 // test test 2 
 class Heroes {
     private Set<Integer> UnlockedAbilities;
@@ -9,7 +10,7 @@ class Heroes {
     private double AD;
     private int HeroID;
     private double DF = 0, temp_DF;
-    private List<String> Abilitiesnames = Arrays.asList("0: Normal Attack", "1:Guard");
+    private List<String> Abilitiesnames = Arrays.asList("0: Normal Attack", "1: Guard");
 
     public Heroes(int HeroID, String Name,Set<Integer> UnlockedAbilities, int MaxHP, int AD) {
         this.HeroID = HeroID;
@@ -33,6 +34,7 @@ class Heroes {
 
 	public void Guard()
 	{
+        System.out.println(this.Name + " used Guard");
 		this.temp_DF = 50;
 	}
 
@@ -42,7 +44,8 @@ class Heroes {
                 NormalAttack(Enemy);
                 break;
             case 1:
-		Guard();
+		        Guard();
+                break;
             default:
                 System.out.println("Invalid Ability");
                 break;
@@ -76,7 +79,11 @@ class Heroes {
 			else
 			{
                 System.out.println(enemy.Name + "'s turn.");
-				enemy.NormalAttack(this);
+                enemy.temp_DF = 0;
+                int index = new Random().nextInt(enemy.UnlockedAbilities.size());
+                int ability = new ArrayList<>(enemy.UnlockedAbilities).get(index);
+                enemy.UseAbility(this, ability);
+
 			}
 			turn = !turn;
         }
@@ -95,7 +102,7 @@ class CombatTesting {
     
     public static void main (String[] args) {
         Heroes TestingHero = new Heroes(1,"TestingHero",new HashSet<>(Arrays.asList(0, 1)), 10, 10); 
-        Heroes TestingDummy = new Heroes(2,"TestingDummy",new HashSet<>(Arrays.asList(0)), 100, 1);
+        Heroes TestingDummy = new Heroes(2,"TestingDummy",new HashSet<>(Arrays.asList(0,1)), 100, 1);
         TestingHero.Battle(TestingDummy);
     }
 }
