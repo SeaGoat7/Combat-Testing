@@ -4,11 +4,12 @@ import java.util.Scanner;
 class Heroes {
     private Set<Integer> UnlockedAbilities;
     private String Name;
-    private int HP;
-    private int MaxHP;
-    private int AD;
+    private double HP;
+    private double MaxHP;
+    private double AD;
     private int HeroID;
-    private List<String> Abilitiesnames = Arrays.asList("0: Normal Attack");
+    private double DF = 0, temp_DF;
+    private List<String> Abilitiesnames = Arrays.asList("0: Normal Attack", "1:Guard");
 
     public Heroes(int HeroID, String Name,Set<Integer> UnlockedAbilities, int MaxHP, int AD) {
         this.HeroID = HeroID;
@@ -24,15 +25,24 @@ class Heroes {
     }
 
     public void NormalAttack (Heroes Enemy){
-        Enemy.HP -= this.AD;
-        System.out.println(this.Name + " Attacked " + Enemy.Name + " for " + this.AD + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
+	double total_def = Enemy.DF + Enemy.temp_DF;
+	double damage_done = this.AD*(1.0 - total_def/100.0);
+	Enemy.HP -= damage_done;
+        System.out.println(this.Name + " Attacked " + Enemy.Name + " for " + damage_done + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
     }
+
+	public void Guard()
+	{
+		this.temp_DF = 50;
+	}
 
     public void UseAbility (Heroes Enemy, int Choice){
         switch (Choice){
             case 0:
                 NormalAttack(Enemy);
                 break;
+            case 1:
+		Guard();
             default:
                 System.out.println("Invalid Ability");
                 break;
@@ -49,7 +59,8 @@ class Heroes {
             System.out.println("");
 			if(turn)
 			{
-                System.out.println(this.Name + "'s turn.");
+				System.out.println(this.Name + "'s turn.");
+				this.temp_DF = 0;
 				int ability;
                 for(int ID: this.UnlockedAbilities)
                 {
@@ -83,7 +94,7 @@ class Heroes {
 class CombatTesting {
     
     public static void main (String[] args) {
-        Heroes TestingHero = new Heroes(1,"TestingHero",new HashSet<>(Arrays.asList(0)), 10, 10); 
+        Heroes TestingHero = new Heroes(1,"TestingHero",new HashSet<>(Arrays.asList(0, 1)), 10, 10); 
         Heroes TestingDummy = new Heroes(2,"TestingDummy",new HashSet<>(Arrays.asList(0)), 100, 1);
         TestingHero.Battle(TestingDummy);
     }
