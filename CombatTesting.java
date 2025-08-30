@@ -1,15 +1,14 @@
 import java.util.*;
 import java.util.Scanner;
 
-// test test 2 
 class Heroes {
     private Set<Integer> UnlockedAbilities;
     private String Name;
-    private double HP;
-    private double MaxHP;
-    private double AD;
+    private int HP;
+    private int MaxHP;
+    private int AD;
     private int HeroID;
-    private double DF = 0, temp_DF;
+    private int DF = 0, temp_DF;
     private List<String> Abilitiesnames = Arrays.asList("0: Normal Attack", "1: Guard");
 
     public Heroes(int HeroID, String Name,Set<Integer> UnlockedAbilities, int MaxHP, int AD) {
@@ -26,16 +25,20 @@ class Heroes {
     }
 
     public void NormalAttack (Heroes Enemy){
-	double total_def = Enemy.DF + Enemy.temp_DF;
+	int total_def = Enemy.DF + Enemy.temp_DF;
 	double damage_done = this.AD*(1.0 - total_def/100.0);
-	Enemy.HP -= damage_done;
-        System.out.println(this.Name + " Attacked " + Enemy.Name + " for " + damage_done + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
+    int Final_damage = (int) damage_done;
+    if (Final_damage < 1){
+        Final_damage = 1; 
+    }
+	Enemy.HP -= Final_damage;
+        System.out.println(this.Name + " Attacked " + Enemy.Name + " for " + Final_damage + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
     }
 
 	public void Guard()
 	{
         System.out.println(this.Name + " used Guard");
-		this.temp_DF = 50;
+		this.temp_DF = 55;
 	}
 
     public void UseAbility (Heroes Enemy, int Choice){
