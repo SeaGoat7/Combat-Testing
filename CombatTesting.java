@@ -32,14 +32,34 @@ class Heroes {
         Final_damage = 1; 
     }
 	Enemy.HP -= Final_damage;
-        System.out.println(this.Name + " Attacked " + Enemy.Name + " for " + Final_damage + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
+        System.out.println("\n" + this.Name + " Attacked " + Enemy.Name + " for " + Final_damage + " damage. " + Enemy.Name + " has " + Enemy.HP + " HP left.");
     }
 
 	public void Guard()
 	{
-        System.out.println(this.Name + " used Guard");
+        System.out.println("\n" + this.Name + " used Guard");
 		this.temp_DF = 55;
 	}
+    
+    public void InTown(Heroes TestingDummy){
+        Scanner scanner = new Scanner(System.in);
+        boolean Checker = true;
+        while (Checker) {
+            System.out.println(" 0: Exit\n 1: Heal\n 2: Fight the Dummy");
+            int choice = scanner.nextInt();
+            switch(choice){
+                case 0:
+                Checker = false;
+                case 1:
+                this.HP = this.MaxHP;
+                break;
+                case 2:
+                this.Battle(TestingDummy);
+                break;
+            }
+        }
+        scanner.close();
+    }
 
     public void UseAbility (Heroes Enemy, int Choice){
         switch (Choice){
@@ -65,7 +85,6 @@ class Heroes {
             System.out.println("");
 			if(turn)
 			{
-				System.out.println(this.Name + "'s turn.");
 				this.temp_DF = 0;
 				int ability;
                 for(int ID: this.UnlockedAbilities)
@@ -81,12 +100,10 @@ class Heroes {
 			}
 			else
 			{
-                System.out.println(enemy.Name + "'s turn.");
                 enemy.temp_DF = 0;
                 int index = new Random().nextInt(enemy.UnlockedAbilities.size());
                 int ability = new ArrayList<>(enemy.UnlockedAbilities).get(index);
                 enemy.UseAbility(this, ability);
-
 			}
 			turn = !turn;
         }
@@ -98,7 +115,7 @@ class Heroes {
         {
             System.out.println(enemy.Name + " has been defeated!");
         }
-        scanner.close();
+        enemy.HP = enemy.MaxHP;
 	}
 }
 class CombatTesting {
@@ -106,6 +123,6 @@ class CombatTesting {
     public static void main (String[] args) {
         Heroes TestingHero = new Heroes(1,"TestingHero",new HashSet<>(Arrays.asList(0, 1)), 10, 10); 
         Heroes TestingDummy = new Heroes(2,"TestingDummy",new HashSet<>(Arrays.asList(0,1)), 100, 1);
-        TestingHero.Battle(TestingDummy);
+        TestingHero.InTown(TestingDummy);
     }
 }
